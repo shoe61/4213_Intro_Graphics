@@ -9,9 +9,6 @@
 //      point. This process is repeated for the number of points specified by 
 //      numPoints. More points (50K vice 5K) yields a higher resolution product.
 //******************************************************************************
-//
-//
-//
 
 
 // Two-Dimensional Sierpinski Gasket       

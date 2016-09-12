@@ -4,7 +4,7 @@
 //                Intro to Computer Graphics 9/12/2016
 //******************************************************************************
 // With origin at center of viewing area, draw a counterclockwise squared spiral
-// figure to mimic the example in the assignment. There are 37 points plotted. 
+// figure to mimic the example in the assignment. 
 //******************************************************************************
 
 
@@ -32,24 +32,28 @@ init( void )
 
 	double x = 0.0;
 	double y = 0.0;
+
+   //specify origin at center
 	points[1] = vec2( x, y);
 
-    // compute and store N-1 new points
-	double l = 0.1;
-	int k = 1;
-	int v = 1;
+    // compute and store Numpoints-1 new points
+	double l = 0.1;   //the length of each leg of the spiral
+	int k = 1;        //x and y are alternately "incremented" and "decremented"
+                     //to accomplish this, int k alternates +1, -1
+	int v = 1;        //corner counter
 	 
     for ( int i = 1; i < 19; i++) 
 	{
-		v++;
-		x += k*l;
-		points[v] = vec2(x, y);
-		v++;
-		y -= k*l;
-		points[v] = vec2(x, y);
+		v++;                          //set subscript to next corner in points
+		x += k*l;                     //x value augmented by l; y is unchanged
+		points[v] = vec2(x, y);       //define new point
+		v++;                          //set subscript to next corner in points
+		y -= k*l;                     //y is de-augmented; x is unchanged
+		points[v] = vec2(x, y);       //define new point
 		
-		l += 0.1;
-		k *= -1;
+		l += 0.1;                     //l is augmented for next two legs
+		k *= -1;                      //-k means x will decrease and y increase.
+                                    //This changes after every two legs.
     }
 
 	
@@ -115,7 +119,7 @@ main( int argc, char **argv )
     glutInitContextVersion( 3, 2 );
     glutInitContextProfile( GLUT_CORE_PROFILE );
 
-    glutCreateWindow( "Sierpinski Gasket" );
+    glutCreateWindow( "Scott Schumacher Project 1" );
 	//the following code was given in class:
 	glewExperimental = GL_TRUE;
 

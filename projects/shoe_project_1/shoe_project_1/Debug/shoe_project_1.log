@@ -1,8 +1,8 @@
-﻿Build started 9/11/2016 11:57:53 PM.
+﻿Build started 9/13/2016 7:20:35 AM.
      1>Project "C:\4213_Intro_Graphics\projects\shoe_project_1\shoe_project_1\shoe_project_1.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt append_example2.cpp
-         append_example2.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt InitShader.cpp
+         InitShader.cpp
      1>c:\4213_intro_graphics\projects\shoe_project_1\shoe_project_1\angel.h(63): warning C4305: 'initializing' : truncation from 'double' to 'const GLfloat'
      1>c:\4213_intro_graphics\projects\shoe_project_1\shoe_project_1\mat.h(707): warning C4244: '=' : conversion from 'double' to 'GLfloat', possible loss of data
      1>c:\4213_intro_graphics\projects\shoe_project_1\shoe_project_1\mat.h(708): warning C4244: '=' : conversion from 'double' to 'GLfloat', possible loss of data
@@ -11,9 +11,6 @@
      1>c:\4213_intro_graphics\projects\shoe_project_1\shoe_project_1\mat.h(732): warning C4244: '=' : conversion from 'double' to 'GLfloat', possible loss of data
      1>c:\4213_intro_graphics\projects\shoe_project_1\shoe_project_1\mat.h(735): warning C4244: '=' : conversion from 'double' to 'GLfloat', possible loss of data
      1>c:\4213_intro_graphics\projects\shoe_project_1\shoe_project_1\mat.h(752): warning C4244: '=' : conversion from 'double' to 'GLfloat', possible loss of data
-     1>c:\4213_intro_graphics\projects\shoe_project_1\shoe_project_1\append_example2.cpp(37): warning C4244: 'argument' : conversion from 'double' to 'GLfloat', possible loss of data
-     1>c:\4213_intro_graphics\projects\shoe_project_1\shoe_project_1\append_example2.cpp(49): warning C4244: 'argument' : conversion from 'double' to 'GLfloat', possible loss of data
-     1>c:\4213_intro_graphics\projects\shoe_project_1\shoe_project_1\append_example2.cpp(52): warning C4244: 'argument' : conversion from 'double' to 'GLfloat', possible loss of data
        Link:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\4213_Intro_Graphics\projects\shoe_project_1\Debug\shoe_project_1.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\4213_Intro_Graphics\projects\shoe_project_1\Debug\shoe_project_1.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\4213_Intro_Graphics\projects\shoe_project_1\Debug\shoe_project_1.lib" /MACHINE:X86 Debug\append_example2.obj
          Debug\InitShader.obj
@@ -22,4 +19,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:03.55
+Time Elapsed 00:00:05.06

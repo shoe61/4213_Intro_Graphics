@@ -1,7 +1,7 @@
 //******************************************************************************
-//                Project #0 Two Dimensional Sierpinski Gasket
+//                Project #1 Spiral
 //                Name: Scott Schumacher
-//                Intro to Computer Graphics 9/7/2016
+//                Intro to Computer Graphics 9/12/2016
 //******************************************************************************
 
 

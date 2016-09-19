@@ -124,7 +124,7 @@ init()
 }
 
 //----------------------------------------------------------------------------
-
+int frame, fps, time, timebase = 0;
 void
 display( void )
 {
@@ -132,6 +132,18 @@ display( void )
     
     glUniform3fv( theta, 1, Theta );
     glDrawArrays( GL_TRIANGLES, 0, NumVertices );
+
+    // Timing etc
+    frame++;
+    time = glutGet(GLUT_ELAPSED_TIME);
+    char display_string[100];
+    if (time - timebase>1000) {
+       fps = frame*1000.0 / (time - timebase);
+       sprintf(display_string, "Simpson’s rotating cube : FPS : %d ", fps);
+       glutSetWindowTitle(display_string);
+       timebase = time;
+       frame = 0;
+    }
 
     glutSwapBuffers();
 }

@@ -1,7 +1,17 @@
+// All of the work on this project is my own. Scott Schumacher:
+//
+//
+//
+//
 //******************************************************************************
-//                Project #1 Spiral
+//                Project #2 Color Cube
 //                Name: Scott Schumacher
-//                Intro to Computer Graphics 9/12/2016
+//                Intro to Computer Graphics 9/23/2016
+//******************************************************************************
+// This program is an adaptation of source code from the Angel; it has been mod-
+// ified by encapsulating all the elements necessary to generate a cube in a
+// class. Most of the modification involved rearranging existing code and re-
+// directing function calls.
 //******************************************************************************
 
 

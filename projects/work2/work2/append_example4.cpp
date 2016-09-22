@@ -1,3 +1,18 @@
+// All of the work on this project is my own. Scott Schumacher:
+//
+//
+//
+//
+//******************************************************************************
+//                Project #2 Color Cube
+//                Name: Scott Schumacher
+//                Intro to Computer Graphics 9/23/2016
+//******************************************************************************
+// This program is an adaptation of source code from the Angel; it has been mod-
+// ified by encapsulating all the elements necessary to generate a cube in a
+// class. Most of the modification involved rearranging existing code and re-
+// directing function calls.
+//******************************************************************************
 //
 // Display a color cube
 //
@@ -13,16 +28,14 @@
 typedef Angel::vec4  color4;
 typedef Angel::vec4  point4;
 
-const int NumVertices = 36; //(6 faces)(2 triangles/face)(3 vertices/triangle)
-
-//----------------------------------------------------------------------------
+//******************************************************************************
 
 class Cube
    {
    
    private:
       int Index = 0;
-      
+      static const int NumVertices = 36; //(6 faces)(2 triangles/face)(3 vertices/triangle)
       point4 points[NumVertices];
       color4 colors[NumVertices];
       
@@ -46,7 +59,7 @@ class Cube
    
    };
 
-//----------------------------------------------------------------------------
+//******************************************************************************
 
 Cube::Cube()
 {
@@ -89,7 +102,7 @@ Cube::Cube()
    quad(5, 4, 0, 1);
 }
 
-//----------------------------------------------------------------------------
+//******************************************************************************
 
 void Cube::quad(int a, int b, int c, int d)
    {
@@ -101,7 +114,7 @@ void Cube::quad(int a, int b, int c, int d)
    colors[Index] = vertex_colors[d]; points[Index] = vertices[d]; Index++;
    }
 
-//----------------------------------------------------------------------------
+//******************************************************************************
 
 void Cube::load(GLuint program)
 {
@@ -125,21 +138,21 @@ void Cube::load(GLuint program)
       BUFFER_OFFSET(sizeof(points)));
 }
 
-//----------------------------------------------------------------------------
+//******************************************************************************
 
 void Cube::draw()
 {
    glDrawArrays(GL_TRIANGLES, 0, NumVertices);
 }
 
-//----------------------------------------------------------------------------
+//******************************************************************************
 
 Cube::~Cube()
 {
   
 }
 
-//----------------------------------------------------------------------------
+//******************************************************************************
 
 // Array of rotation angles (in degrees) for each coordinate axis
 enum { Xaxis = 0, Yaxis = 1, Zaxis = 2, NumAxes = 3 };
@@ -150,7 +163,7 @@ Cube cube;
 
 GLuint  theta;  // The location of the "theta" shader uniform variable
 
-//----------------------------------------------------------------------------
+//******************************************************************************
 
 // OpenGL initialization
 void
@@ -174,7 +187,7 @@ init()
     glClearColor( 1.0, 1.0, 1.0, 1.0 );
 }
 
-//----------------------------------------------------------------------------
+//******************************************************************************
 
 int frame, fps, time, timebase = 0;
 void
@@ -201,7 +214,7 @@ display( void )
     glutSwapBuffers();
 }
 
-//----------------------------------------------------------------------------
+//******************************************************************************
 
 void
 keyboard( unsigned char key, int x, int y )
@@ -214,7 +227,7 @@ keyboard( unsigned char key, int x, int y )
     }
 }
 
-//----------------------------------------------------------------------------
+//******************************************************************************
 
 void
 mouse( int button, int state, int x, int y )
@@ -228,7 +241,7 @@ mouse( int button, int state, int x, int y )
     }
 }
 
-//----------------------------------------------------------------------------
+//******************************************************************************
 
 void
 idle( void )
@@ -242,7 +255,7 @@ idle( void )
     glutPostRedisplay();
 }
 
-//----------------------------------------------------------------------------
+//******************************************************************************
 
 int
 main( int argc, char **argv )

@@ -1,3 +1,8 @@
+//Scott Schumacher Project 2
+//vshader.glsl
+//No modifications by me...
+
+
 #version 150
 
 in  vec4 vPosition;

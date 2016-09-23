@@ -79,7 +79,7 @@ Cube::Cube()
 
    // RGBA colors
    // This is modified from the original in that the vertices are specified by
-   // assignment statements.
+   // assignment statements. (VS 2013?)
 
    vertex_colors[0] = color4(0.0, 0.0, 0.0, 1.0);  // black
    vertex_colors[1] = color4(1.0, 0.0, 0.0, 1.0);  // red
@@ -140,6 +140,7 @@ void Cube::load(GLuint program)
 
 //******************************************************************************
 
+//the draw method doesn't have much to do:
 void Cube::draw()
 {
    glDrawArrays(GL_TRIANGLES, 0, NumVertices);
@@ -147,6 +148,7 @@ void Cube::draw()
 
 //******************************************************************************
 
+//destructor
 Cube::~Cube()
 {
   
@@ -159,6 +161,7 @@ enum { Xaxis = 0, Yaxis = 1, Zaxis = 2, NumAxes = 3 };
 int      Axis = Xaxis;
 GLfloat  Theta[NumAxes] = { 0.0, 0.0, 0.0 };
 
+//Instantiate a cube:
 Cube cube;
 
 GLuint  theta;  // The location of the "theta" shader uniform variable
@@ -178,7 +181,7 @@ init()
     GLuint program = InitShader( "vshader_a4.glsl", "fshader_a4.glsl" );
     glUseProgram(program);
         
-    cube.load(program); //note the program parameter here
+    cube.load(program); //program returned by InitShader.cpp
 
     theta = glGetUniformLocation( program, "theta" );
     
@@ -197,7 +200,7 @@ display( void )
     
     glUniform3fv( theta, 1, Theta );
 
-    cube.draw();
+    cube.draw(); // call to draw
 
     // Timing etc
     frame++;

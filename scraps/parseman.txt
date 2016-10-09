@@ -1,0 +1,147 @@
+#include <fstream>
+#include <iostream>
+#include <string>
+#include <sstream>
+
+
+using namespace std;
+
+void main() // reads and parses the data in an object file
+{
+   string line;
+   ifstream infile("cube.obj");
+   stringstream t;
+   const int BUFFSIZE = 80;
+   char buff[BUFFSIZE];
+   char buff2[BUFFSIZE];
+   int j = 0;
+   
+   //traverses infile by line and reads character at a time into t
+   if (infile.is_open())
+   {
+      while (getline(infile, line))
+      {
+         j++; //this is to count the lines
+
+         for (int i = 0; i < line.size(); i++)
+         {
+            char c = line[i];
+            t << c;
+
+         }
+      }
+      
+      string s = t.str();
+      //cout << s;
+
+      // This returns a number, which appears to be the index of the first character in the string
+      // (not counting #s) gefunden is just german for found. searching for "v " gives 74, which
+      // is the beginning of the first vertex data line...
+      size_t gefunden = s.find("v ");
+      size_t ende = s.find(" ", gefunden + 2);
+      cout << "\ngefunden: " << gefunden << endl;
+      cout << "ende: " << ende << endl;
+      cout << "ende - (gefunden + 2): " << ende - (gefunden + 2) << endl <<endl;
+
+      size_t tfound = t.str().find("v ");
+      cout << "tfound should be equal to gefunden: " << tfound << endl;
+     
+         // get length of file:
+      t.seekg(0, t.end); //moves pointer from start to end
+      
+      int length = t.tellg(); // length of file is equal to tellg at eof
+      
+      t.seekg(gefunden + 2, t.beg); // send pointer back to beginning of file with offset of gefunden plus 2
+      //-- should be at beginning of first vertex coordinate
+
+      t.read(buff, (ende - (gefunden +2))); // this should read in the first vertex coordinate, 0.232013
+
+      cout << "buff: " << buff << endl;
+
+      cout << "length: " << length << endl;
+
+      
+
+
+
+
+      infile.close();
+   }
+
+ 
+ 
+   
+}
+
+****************************************************************************************************************************
+
+#include <fstream>
+#include <iostream>
+#include <string>
+#include <sstream>
+
+
+using namespace std;
+
+void main() // reads and parses the data in an object file
+{
+   string line, s;
+   ifstream infile("cube.obj");
+
+   //infile.open("cube.obj");
+   //FILE* filz = fopen(c:\);
+
+   stringstream t;
+   const int BUFFSIZE = 80;
+   char buff[BUFFSIZE];
+   char buff2[BUFFSIZE];
+   int j = 0;
+   
+   //traverses infile by line and reads character at a time into t
+   if (infile.is_open())
+   {
+      while (getline(infile, line))
+      {
+         j++; //this is to count the lines
+
+         for (int i = 0; i < line.size(); i++)
+         {
+            char c = line[i];
+            t << c;
+         }
+      }
+      
+      s = t.str(); // the find() function works on string objects but not stringstream objects
+
+      // first, find where the vertex array information begins; this is denoted by "v "
+      size_t vert = s.find("v "); //size_t tfound = t.str().find("v ");
+
+      //then read each coordinate from beginning to end
+      size_t start = vert + 2; // vertex info starts 2 places after beginning of "v "
+      cout << "start: " << start << endl;
+      
+      size_t ende1 = s.find(' ', start); //look for first " " delimiter after start, which is endo 1st coord
+      cout << "ende1: " << ende1 << endl;
+      
+      size_t ende2 = s.find(' ', ende1 +1); //look for first " " delimiter after endo 1st coord
+      cout << "ende2: " << ende2 << endl;
+
+      size_t ende3 = s.find("v ", ende2 + 1); //look for first " " delimiter after endo 2nd coord... this is endo 3rd.
+      cout << "ende3: " << ende3 << endl;
+
+      // get length of file:
+      //t.seekg(0, t.end); //moves pointer from start to end
+      
+      
+      t.seekg(start, t.beg); // move pointer to t.beg + start
+      t.read(buff, ende3 - start); // this should read in the first vertex coordinate, 0.232013
+      t.seekg((ende3 - 2), t.beg);
+
+      int lengo = t.tellg();
+      cout << "lengo: " << lengo << endl;
+      
+      cout << "buff: " << buff << endl;
+
+      infile.close();
+   }
+}

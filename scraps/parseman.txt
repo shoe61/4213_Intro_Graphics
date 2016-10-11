@@ -145,3 +145,109 @@ void main() // reads and parses the data in an object file
       infile.close();
    }
 }
+
+***********************************************************************************************************************************************
+#include <fstream>
+#include <iostream>
+#include <string>
+#include <sstream>
+#include<vector>
+
+
+using namespace std;
+
+void main() // reads and parses the data in an object file
+{
+   
+   string line, s;
+   ifstream infile("cube.txt");
+
+ 
+   stringstream t;
+   const int BUFFSIZE = 80;
+   char buff[BUFFSIZE];
+   char buff2[BUFFSIZE];
+   int j = 0;
+
+   //traverses infile by line and reads character at a time into t
+   if (infile.is_open())
+   {
+      while (getline(infile, line))
+      {
+         //j++; //this is to count the lines
+
+         for (int i = 0; i < line.size(); i++)
+         {
+            char c = line[i];
+            t << c;
+         }
+
+         const char *cstr = (t.str()).c_str();
+         //const char *cstr = "v 0.232013 - 0.232013 - 0.232013";
+
+
+         float a, b, c;
+        
+         s = t.str();
+
+         t.str("");
+         //cout << "s: " << s << endl;
+                
+
+         size_t v = s.find("v ");
+         cout << "v: " << v << endl;
+
+         if (v == 0)
+         {
+            scanf_s(cstr, "%d %d %d\n", &a, &b, &c);
+
+            printf("verts:  %d, %d, %d\n", a, b, c);
+
+         }
+         else{ continue;}
+       
+      }
+
+     
+
+   }
+}
+
+***************************************************************************************************************
+
+void openFileRead(ifstream& in)
+{
+	char inFileName[40];
+	cout << " Please enter the input file name : ";
+	cin >> inFileName;
+	in.open(inFileName);
+
+	//Display error message if file fails to open.
+	if (in.fail())
+	{
+		cout << "Couldn't open the file.\n";
+		cout << "Check the file name and location\n";
+		system("pause");
+		exit(0);
+	}
+}
+
+void initializeMaze(ifstream& in, char theMaze[][SIZE])
+{
+	//Inspect file for invalid characters
+	for (int i = 0; i < SIZE; i++)
+	{
+		for (int j = 0; j < SIZE; j++)
+		{
+			in >> theMaze[i][j];
+			if ((theMaze[i][j] != '%') && (theMaze[i][j] != '.'))
+			{
+				cout << endl << endl;
+				cout << "This file has an invalid character, '";
+				cout << theMaze[i][j];
+				cout << "', at row " << i << ", column " << j << ".";
+				cout << endl << endl;
+				system("pause");
+				exit(0);
+			}
+		}

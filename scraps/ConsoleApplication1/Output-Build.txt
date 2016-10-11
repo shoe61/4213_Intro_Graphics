@@ -1,0 +1,14 @@
+﻿1>------ Build started: Project: ConsoleApplication1, Configuration: Debug Win32 ------
+1>  parseMan.cpp
+1>c:\4213_intro_graphics\scraps\consoleapplication1\consoleapplication1\angel.h(63): warning C4305: 'initializing' : truncation from 'double' to 'const GLfloat'
+1>c:\4213_intro_graphics\scraps\consoleapplication1\consoleapplication1\mat.h(707): warning C4244: '=' : conversion from 'double' to 'GLfloat', possible loss of data
+1>c:\4213_intro_graphics\scraps\consoleapplication1\consoleapplication1\mat.h(708): warning C4244: '=' : conversion from 'double' to 'GLfloat', possible loss of data
+1>c:\4213_intro_graphics\scraps\consoleapplication1\consoleapplication1\mat.h(709): warning C4244: '=' : conversion from 'double' to 'GLfloat', possible loss of data
+1>c:\4213_intro_graphics\scraps\consoleapplication1\consoleapplication1\mat.h(730): warning C4244: '=' : conversion from 'double' to 'GLfloat', possible loss of data
+1>c:\4213_intro_graphics\scraps\consoleapplication1\consoleapplication1\mat.h(732): warning C4244: '=' : conversion from 'double' to 'GLfloat', possible loss of data
+1>c:\4213_intro_graphics\scraps\consoleapplication1\consoleapplication1\mat.h(735): warning C4244: '=' : conversion from 'double' to 'GLfloat', possible loss of data
+1>c:\4213_intro_graphics\scraps\consoleapplication1\consoleapplication1\mat.h(752): warning C4244: '=' : conversion from 'double' to 'GLfloat', possible loss of data
+1>c:\4213_intro_graphics\scraps\consoleapplication1\consoleapplication1\parseman.cpp(48): warning C4244: 'argument' : conversion from 'double' to 'GLfloat', possible loss of data
+1>c:\4213_intro_graphics\scraps\consoleapplication1\consoleapplication1\parseman.cpp(71): warning C4244: 'argument' : conversion from 'double' to 'GLfloat', possible loss of data
+1>  ConsoleApplication1.vcxproj -> C:\4213_Intro_Graphics\scraps\ConsoleApplication1\Debug\ConsoleApplication1.exe
+========== Build: 1 succeeded, 0 failed, 0 up-to-date, 0 skipped ==========

@@ -5,8 +5,10 @@
 //   those colors across the triangles.  We us an orthographic projection
 //   as the default projetion.
 
+//http://people.sc.fsu.edu/%7Ejburkardt/data/obj/obj.html
+
 #include "Angel.h"
-#include "cube.h"
+
 #include "Object.h"
 
 #pragma comment(lib, "freeglut")
@@ -21,12 +23,41 @@ GLfloat  Theta[NumAxes] = { 0.0, 0.0, 0.0 };
 
 GLuint  theta;  // The location of the "theta" shader uniform variable
 
-//Instantiate a cube:
-//Cube cube;
+vector<string> models = { "cube.obj", "gourd.obj", "jack.obj", "table.obj" };
+
+int modelChoice;
+
+
+char* select()
+{
+   char* drawIt;
+
+   cout << "Please select the model you'd like to see: \n\t0: a cube with 8 vertices drawn in blender";
+   cout << "\n\t1: a gourd with 326 vertices downloaded from http://people.sc.fsu.edu/%7Ejburkardt/data/obj/obj.html";
+   cout << "\n\t2: a jack with 2312 vertices drawn in blender\n\n";
+
+   cin >> modelChoice;
+
+   switch (modelChoice)
+   {
+   case 0: drawIt = "cube.obj";
+      break;
+   case 1: drawIt = "gourd.obj";
+      break;
+   case 2: drawIt = "jack.obj";
+      break;
+   default: drawIt = "cube.obj";
+   }
+   return drawIt;
+   
+}
+
+
+
+
 
 //instantiate an object:
-
-Object blok("pedestal.obj");
+Object blok(select());
 
 //----------------------------------------------------------------------------
 
@@ -34,6 +65,8 @@ Object blok("pedestal.obj");
 void
 init()
 {
+   
+
     // Create a vertex array object
     GLuint vao;
     glGenVertexArrays( 1, &vao );
@@ -129,7 +162,7 @@ main( int argc, char **argv )
     glutInitWindowSize( 512, 512 );
     glutInitContextVersion( 3, 2 );
     glutInitContextProfile( GLUT_CORE_PROFILE );
-    glutCreateWindow( "Color Cube" );
+    glutCreateWindow( "Various Objects" );
 
     glewExperimental = GL_TRUE;
 

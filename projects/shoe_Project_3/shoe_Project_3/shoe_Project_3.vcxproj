@@ -87,7 +87,7 @@
   <ItemGroup>
     <ClCompile Include="InitShader.cpp" />
     <ClCompile Include="Object.cpp" />
-    <ClCompile Include="proj3.cpp" />
+    <ClCompile Include="rotatingObjects.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

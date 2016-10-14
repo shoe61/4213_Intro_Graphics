@@ -6,7 +6,8 @@
 #include<iostream>
 #include"mat.h"
 #include"vec.h"
-
+#pragma comment(lib, "freeglut")
+#pragma comment(lib, "glew32")
 
 using namespace std;
 
@@ -28,7 +29,6 @@ class Object
    GLuint buffer, Ibuffer;
    
 public:
-   Object();
    Object(char* file_name);
    ~Object();
    int load(GLuint);

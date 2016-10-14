@@ -1,20 +1,27 @@
+// All of the work on this project is my own, except what what was given in
+// class. Scott Schumacher:
 //
-// Display a color cube
 //
-// Colors are assigned to each vertex and then the rasterizer interpolates
-//   those colors across the triangles.  We us an orthographic projection
-//   as the default projetion.
-
-//http://people.sc.fsu.edu/%7Ejburkardt/data/obj/obj.html
-
-#include "Angel.h"
+//
+//
+//******************************************************************************
+//                Project #3 Rotating Objects
+//                Name: Scott Schumacher
+//                Intro to Computer Graphics 10/14/2016
+//******************************************************************************
+// This program is an adaptation of Project 2. Now, instead of explicitly listing
+// the vertices of the object to be displayed, the program reads in the object's
+// vertex list, normal list, and an index of the vertices used in the object's 
+// faces. Also, instead of listing each vertex every time it appears in a face, 
+// vertices are indexed and called by their indices. When you run the program, 
+// you'll be given the choice of three models- two that I drew in Blender and 
+// one downloaded from http://people.sc.fsu.edu/%7Ejburkardt/data/obj/obj.html.
+// Colors are assigned according to the coordiantes of the vertex to which 
+// they're assigned.
+//
+//******************************************************************************
 
 #include "Object.h"
-
-#pragma comment(lib, "freeglut")
-#pragma comment(lib, "glew32")
-
-
 
 // Array of rotation angles (in degrees) for each coordinate axis
 enum { Xaxis = 0, Yaxis = 1, Zaxis = 2, NumAxes = 3 };
@@ -23,41 +30,38 @@ GLfloat  Theta[NumAxes] = { 0.0, 0.0, 0.0 };
 
 GLuint  theta;  // The location of the "theta" shader uniform variable
 
-vector<string> models = { "cube.obj", "gourd.obj", "jack.obj", "table.obj" };
+//******************************************************************************
 
-int modelChoice;
-
+// char* select() prompts the user to select an object file to be instantiated.
+// A switch sets the user's choice as char* drawIt, which is sent as an argument 
+// to the the Object constructor.
 
 char* select()
 {
-   char* drawIt;
+   int modelChoice;  // switch variable
+   char* drawIt;     // argument to constructor
 
    cout << "Please select the model you'd like to see: \n\t0: a cube with 8 vertices drawn in blender";
-   cout << "\n\t1: a gourd with 326 vertices downloaded from http://people.sc.fsu.edu/%7Ejburkardt/data/obj/obj.html";
+   cout << "\n\t1: a teapot with 530 vertices downloaded from http://people.sc.fsu.edu/%7Ejburkardt/data/obj/obj.html";
    cout << "\n\t2: a jack with 2312 vertices drawn in blender\n\n";
-
+   cout << "Type 0, 1, or 2 and press ENTER: ";
    cin >> modelChoice;
 
    switch (modelChoice)
    {
    case 0: drawIt = "cube.obj";
       break;
-   case 1: drawIt = "gourd.obj";
+   case 1: drawIt = "teapot.obj";
       break;
    case 2: drawIt = "jack.obj";
       break;
    default: drawIt = "cube.obj";
    }
    return drawIt;
-   
 }
 
-
-
-
-
-//instantiate an object:
-Object blok(select());
+//instantiate an object called Model from a file selected by the user in char* select():
+Object Model(select());
 
 //----------------------------------------------------------------------------
 
@@ -65,8 +69,6 @@ Object blok(select());
 void
 init()
 {
-   
-
     // Create a vertex array object
     GLuint vao;
     glGenVertexArrays( 1, &vao );
@@ -76,7 +78,7 @@ init()
     GLuint program = InitShader( "vshader_a4.glsl", "fshader_a4.glsl" );
     glUseProgram( program );
 
-    blok.load(program); //program returned by InitShader.cpp
+    Model.load(program); //program returned by InitShader.cpp
 
     theta = glGetUniformLocation( program, "theta" );
     
@@ -85,7 +87,9 @@ init()
 }
 
 //----------------------------------------------------------------------------
+
 int frame, fps, time, timebase = 0;
+
 void
 display( void )
 {
@@ -93,7 +97,7 @@ display( void )
     
     glUniform3fv( theta, 1, Theta );
 
-    blok.draw(); // call to draw
+    Model.draw(); // call to draw
     
 
     // Timing etc
@@ -102,12 +106,11 @@ display( void )
     char display_string[100];
     if (time - timebase>1000) {
        fps = frame*1000.0 / (time - timebase);
-       sprintf(display_string, "Simpson’s rotating cube : FPS : %d ", fps);
+       sprintf(display_string, "Schumacher's rotating objects : FPS : %d ", fps);
        glutSetWindowTitle(display_string);
        timebase = time;
        frame = 0;
     }
-
     glutSwapBuffers();
 }
 
@@ -143,7 +146,7 @@ mouse( int button, int state, int x, int y )
 void
 idle( void )
 {
-    Theta[Axis] += 0.01;
+    Theta[Axis] += 0.03;
 
     if ( Theta[Axis] > 360.0 ) {
 	Theta[Axis] -= 360.0;
@@ -167,7 +170,6 @@ main( int argc, char **argv )
     glewExperimental = GL_TRUE;
 
     glewInit();
-
     init();
 
     glutDisplayFunc( display );

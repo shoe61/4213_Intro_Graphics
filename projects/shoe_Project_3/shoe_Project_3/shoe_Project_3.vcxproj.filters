@@ -29,10 +29,10 @@
     <ClCompile Include="InitShader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="proj3.cpp">
+    <ClCompile Include="Object.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Object.cpp">
+    <ClCompile Include="rotatingObjects.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -1,9 +1,22 @@
+//******************************************************************************
+//                Project #3 Rotating Objects
+//                Name: Scott Schumacher
+//                Intro to Computer Graphics 10/14/2016
+//******************************************************************************
+// This file, Object.cpp, contains the implementation of the Object class de-
+// clared in Object.h. There are four public methods: a parameterized constructor
+// which receives as its only parameter the name of the file to be instantiated;
+// the Load method, which creates buffer objects on the GPU and initializes them;
+// the Draw method, which directs the GPU to display the buffed data; and the 
+// Destructor.
+
+//----------------------------------------------------------------------------
+
 #include "Object.h"
 
+//----------------------------------------------------------------------------
+//
 
-Object::Object()
-{
-}
 Object::Object(char* file_name)
 {
    //open the file

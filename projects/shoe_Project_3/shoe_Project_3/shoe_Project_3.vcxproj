@@ -89,6 +89,10 @@
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="rotatingObjects.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="fshader_a4.glsl" />
+    <None Include="vshader_a4.glsl" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

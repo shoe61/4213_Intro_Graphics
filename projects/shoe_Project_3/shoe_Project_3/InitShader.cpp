@@ -1,10 +1,8 @@
 //******************************************************************************
-//                Project #1 Spiral
+//                Project #3 Rotating Objects
 //                Name: Scott Schumacher
-//                Intro to Computer Graphics 9/12/2016
+//                Intro to Computer Graphics 10/14/2016
 //******************************************************************************
-
-
 
 #include "Angel.h"
 

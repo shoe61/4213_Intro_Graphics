@@ -15,11 +15,17 @@
 #include "Object.h"
 
 //----------------------------------------------------------------------------
-//
+// The constructor, Object::Object(char* file_name) accepts as an argument the
+// file name of the model to be instantiated. It checks to make sure the file
+// exists and is open. Then it inspects each line for vertex, normal, or index
+// data, and appends that data to the appropriate vector. The constructor is 
+// set up as a while loop, so it inspects every line; the only other loop is
+// a for 3 loop in the index routine. The overall complexity of this method is
+// O(n), where n = the number of vertices.
 
 Object::Object(char* file_name)
 {
-   //open the file
+   //open the file and check that it's open
    ifstream in;
    in.open(file_name);
    if (!in)
@@ -29,34 +35,40 @@ Object::Object(char* file_name)
    }
    name = file_name;
 
-   string delim; // delimiter
-   double vx, vy, vz; // vertex x, y, and z cooridinates
-   double vnx, vny, vnz;  
-
-   stringstream ss;
-   string line, s;
+   string delim;           // delimiter is the string at the beginning of a line  
+                           // thatindicates the type of data contained therein.
    
-   int vv, tt, nn;
+   double vx, vy, vz;      // vertex x, y, and z cooridinates
+   double vnx, vny, vnz;   //normal x, y, and z coordinates  
+   int vv, tt, nn;         //vertex, texture (not used), and normal indices
 
-   while (getline(in, line))
+   stringstream ss;        // stringstream object created from each line, transfers  
+                           // data to the appropriate vectors.
+   string line;            // file is read line by line
+
+   
+   while (getline(in, line))              // Iterate through the file line by line
    {
-      if (line.substr(0, 2) == "v ")
+      if (line.substr(0, 2) == "v ")      // Identify the vertex data lines
       {
-         ss << line;
-         ss >> delim >> vx >> vy >> vz;
-         ss.str(""); ss.clear();
-         vertices.push_back(vec4(vx, vy, vz, 1));
-         //i++;
-      }
+         ss << line;                      // read the line out to a stringstream object
+         ss >> delim >> vx >> vy >> vz;   // parse the delimiter and vertex coordinates
+         ss.str(""); ss.clear();          // empty the stringstream object and clear flags
+        
+         vertices.push_back(vec4(vx, vy, vz, 1));        // store vertex data
+       }
+      numVertices = vertices.size();      // vertex count
       
-      if (line.substr(0, 2) == "vn")
+      if (line.substr(0, 2) == "vn")      // repeat above procedure for vertex normals
       {
          ss << line;
          ss >> delim >> vnx >> vny >> vnz;
          ss.str(""); ss.clear();
          normals.push_back(vec4(vnx, vny, vnz, 1));
-      }
-      if (line.substr(0, 2) == "f ")
+      }numNormals = normals.size();       
+
+
+      if (line.substr(0, 2) == "f ")      // read indices; there are three sets per line
       {
          ss << line;
          ss >> delim;
@@ -67,30 +79,24 @@ Object::Object(char* file_name)
             ss >> vv >> cdelim >> cdelim >> nn;
             vertIndices.push_back((vv) -1);
             normIndices.push_back((nn)-1);
-            //cout << "vv: " << vv; cout << "  nn: " << nn << endl;
          }
          ss.str(""); ss.clear();
       }
-
+      numIndices = vertIndices.size();
    }
-   numVertices = vertices.size();
-   cout << "numVertices: " << numVertices << endl;
-   numNormals = normals.size();
-   cout << "numNormals: " << numNormals << endl;
-   numIndices = vertIndices.size();
-   cout << "numIndices: " <<numIndices<< endl;
 }
 
-
+//----------------------------------------------------------------------------
 
 int Object::load(GLuint program)
 {
    // Create and initialize a buffer object
-   //GLuint buffer;
-   int size = numVertices * 16;
+   
+   int size = numVertices * 16;  // each vertex requires 16 bytes
    glGenBuffers(1, &buffer);
    glBindBuffer(GL_ARRAY_BUFFER, buffer);
-   //put color and verts in same buffer
+   
+   //put color and vertex indices in same buffer
    glBufferData(GL_ARRAY_BUFFER, size + size, NULL, GL_STATIC_DRAW);
    glBufferSubData(GL_ARRAY_BUFFER, 0, size, &vertices[0]);
    glBufferSubData(GL_ARRAY_BUFFER, size, size, &vertices[0]);
@@ -99,19 +105,21 @@ int Object::load(GLuint program)
    glGenBuffers(1, &Ibuffer);
    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, Ibuffer);
    glBufferData(GL_ELEMENT_ARRAY_BUFFER, numIndices * 4, &vertIndices[0], GL_STATIC_DRAW);
-
+   
    GLuint vPosition = glGetAttribLocation(program, "vPosition");
    glEnableVertexAttribArray(vPosition);
    glVertexAttribPointer(vPosition, 4, GL_FLOAT, GL_FALSE, 0,
-      BUFFER_OFFSET(0));
+      BUFFER_OFFSET(0));   // offset 0: vertex position data in first half of buffer
 
    GLuint vColor = glGetAttribLocation(program, "vColor");
    glEnableVertexAttribArray(vColor);
    glVertexAttribPointer(vColor, 4, GL_FLOAT, GL_FALSE, 0,
-      BUFFER_OFFSET(size));
+      BUFFER_OFFSET(size));   // offset size: color data in second half of buffer
 
    return 0;
 }
+
+//----------------------------------------------------------------------------
 
 void Object::draw()
 {
@@ -119,6 +127,8 @@ void Object::draw()
    glBindVertexArray(Ibuffer);
    glDrawElements(GL_TRIANGLES, numIndices, GL_UNSIGNED_INT, 0);
 }
+
+//----------------------------------------------------------------------------
 
 Object::~Object()
 {

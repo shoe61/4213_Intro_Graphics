@@ -1,18 +1,23 @@
+//******************************************************************************
+//                Project #3 Rotating Objects
+//                Name: Scott Schumacher
+//                Intro to Computer Graphics 10/14/2016
+//******************************************************************************
+// This file, Object.cpp, is the declaration of the object class; it describes
+// the variables, data structures, and methods that are common to objects of this
+// class. I probably should have named it something other than "Object."
+
+#pragma comment(lib, "freeglut")
+#pragma comment(lib, "glew32")
+#pragma once
+
 #include<vector>
 #include "Angel.h"
 #include<string>
 #include<fstream>
 #include<sstream>
-#include<iostream>
-#include"mat.h"
-#include"vec.h"
-#pragma comment(lib, "freeglut")
-#pragma comment(lib, "glew32")
 
 using namespace std;
-
-
-#pragma once
 
 class Object
 {

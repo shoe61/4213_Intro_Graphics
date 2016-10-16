@@ -41,8 +41,10 @@ char* select()
    int modelChoice;  // switch variable
    char* drawIt;     // argument to constructor
 
-   cout << "Please select the model you'd like to see: \n\n\t0: a cube with 8 vertices drawn in blender";
-   cout << "\n\t1: a teapot with 530 vertices downloaded from http://people.sc.fsu.edu/%7Ejburkardt/data/obj/obj.html";
+   cout << "Please select the model you'd like to see: \n\n\t0: a cube with 8 vertices";
+   cout << " drawn in blender";
+   cout << "\n\t1: a teapot with 530 vertices downloaded from";
+   cout << " http://people.sc.fsu.edu/%7Ejburkardt/data/obj/obj.html";
    cout << "\n\t2: a jack with 2312 vertices drawn in blender\n\n";
    cout << "Type 0, 1, or 2 and press ENTER: ";
    cin >> modelChoice;

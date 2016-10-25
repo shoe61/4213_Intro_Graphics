@@ -68,7 +68,7 @@ Object::Object(char* file_name)
       }numNormals = normals.size(); */      
 
 
-      /*if (line.substr(0, 2) == "f ")      // read indices; there are three sets per line
+      if (line.substr(0, 2) == "f ")      // read indices; there are three sets per line
       {
          ss << line;
          ss >> delim;
@@ -78,11 +78,18 @@ Object::Object(char* file_name)
          {
             ss >> vv >> cdelim >> cdelim >> nn;
             vertIndices.push_back((vv) -1);
-            normIndices.push_back((nn)-1);
+            //normIndices.push_back((nn)-1);
          }
          ss.str(""); ss.clear();
       }
-      numIndices = vertIndices.size();*/
+      numIndices = vertIndices.size();
+      
+   }
+
+   // use the vertex indices to create an array of triangles
+   for (int i = 0; i < numIndices; i++)
+   {
+      points.push_back(vertices[vertIndices[i]]);
    }
 }
 
@@ -92,14 +99,15 @@ int Object::load(GLuint program)
 {
    // Create and initialize a buffer object
    
-   int size = numVertices * 16;  // each vertex requires 16 bytes
+   int size = numIndices * 16;   // each vertex requires 16 bytes, and is listed repeatedly
+                                 // each time it's used...
    glGenBuffers(1, &buffer);
    glBindBuffer(GL_ARRAY_BUFFER, buffer);
    
    //put color and vertex indices in same buffer
    glBufferData(GL_ARRAY_BUFFER, size + size, NULL, GL_STATIC_DRAW);
-   glBufferSubData(GL_ARRAY_BUFFER, 0, size, &vertices[0]);
-   glBufferSubData(GL_ARRAY_BUFFER, size, size, &vertices[0]);
+   glBufferSubData(GL_ARRAY_BUFFER, 0, size, &points[0]);
+   glBufferSubData(GL_ARRAY_BUFFER, size, size, &points[0]);
 
    //load the index buffer for the vertices
    /*glGenBuffers(1, &Ibuffer);
@@ -125,7 +133,7 @@ void Object::draw()
 {
    //glBindVertexArray(buffer);
    //glBindVertexArray(Ibuffer);
-   glDrawArrays(GL_TRIANGLES, 0, numVertices * 16);
+   glDrawArrays(GL_TRIANGLES, 0, numIndices);
 }
 
 //----------------------------------------------------------------------------

@@ -23,15 +23,18 @@ class Object
 {
    string name;
    int numVertices;
-   //int numIndices;
+   int numIndices;
    //int numNormals;
    vector<vec4>vertices;
    //vector<vec4> normals;
-   //vector<GLuint> vertIndices;
+   vector<GLuint> vertIndices;
    //vector<GLuint> normIndices;
    vec4* colorsP; //expedient- points to vertIndices
+
+   vector<vec4>points;
+   int numPoints;
  
-   GLuint buffer/*, Ibuffer*/;
+   GLuint buffer, Ibuffer;
    
 public:
    Object(char* file_name);

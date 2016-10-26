@@ -81,6 +81,20 @@ init()
     glUseProgram( program );
 
     Model.load(program); //program returned by InitShader.cpp
+    
+    // this is testing the bounding_box method:
+    cout << "bounding box x, including 20 percent: " << (Model.bounding_box()).x << endl;
+    cout << "bounding box y, including 20 percent: " << (Model.bounding_box()).y << endl;
+    cout << "bounding box z, including 20 percent: " << (Model.bounding_box()).z << endl;
+
+    // this is to check the bounding_box_max method:
+    // it's padded!
+    cout << "BBox max = " << (Model.bounding_box_max()) << endl;
+
+    // this is to check the ctr_box method:
+    cout << "bounding box center x: " << (Model.ctr_box()).x << endl;
+    cout << "bounding box center y: " << (Model.ctr_box()).y << endl;
+    cout << "bounding box center z: " << (Model.ctr_box()).z << endl;
 
     theta = glGetUniformLocation( program, "theta" );
     
@@ -100,7 +114,7 @@ display( void )
     glUniform3fv( theta, 1, Theta );
 
     Model.draw(); // call to draw
-    
+     
 
     // Timing etc
     frame++;
@@ -135,10 +149,10 @@ void
 mouse( int button, int state, int x, int y )
 {
     if ( state == GLUT_DOWN ) {
-	switch( button ) {
-	    case GLUT_LEFT_BUTTON:    Axis = Xaxis;  break;
-	    case GLUT_MIDDLE_BUTTON:  Axis = Yaxis;  break;
-	    case GLUT_RIGHT_BUTTON:   Axis = Zaxis;  break;
+       switch (button) {
+       case GLUT_LEFT_BUTTON:    Axis = Xaxis; Theta[Axis] += 5; break;
+       case GLUT_MIDDLE_BUTTON:  Axis = Yaxis; Theta[Axis] += 5; break;
+       case GLUT_RIGHT_BUTTON:   Axis = Zaxis; Theta[Axis] += 5; break;
 	}
     }
 }
@@ -148,7 +162,7 @@ mouse( int button, int state, int x, int y )
 void
 idle( void )
 {
-    Theta[Axis] += 0.03;
+    //Theta[Axis] += 0.03;
 
     if ( Theta[Axis] > 360.0 ) {
 	Theta[Axis] -= 360.0;
@@ -180,5 +194,6 @@ main( int argc, char **argv )
     glutIdleFunc( idle );
 
     glutMainLoop();
+    
     return 0;
 }

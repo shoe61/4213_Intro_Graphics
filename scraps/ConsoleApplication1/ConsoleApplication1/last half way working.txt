@@ -1,0 +1,134 @@
+#include "Object.h"
+
+
+Object::Object()
+{
+}
+Object::Object(char* file_name)
+{
+   //open the file
+   ifstream in;
+   in.open(file_name);
+   if (!in)
+   {
+      cerr << "Oops! Can't open " << file_name;
+      exit(1);
+   }
+   name = file_name;
+
+   string delim; // delimiter
+   double vx, vy, vz; // vertex x, y, and z cooridinates
+   double vnx, vny, vnz;  
+
+   //read the file, ignoring everything until beginning of vertex list
+   in >> delim;
+   while (delim != "v")
+   {
+      in >> delim;
+      cout << "delim: " << delim << endl;
+   }
+   
+   //read the vertex list as long as delim == "v "
+   int i = 0;
+   while (delim == "v")
+   {
+      in >> vx >> vy>> vz;
+      //cout << "\nvx" << i << ": " << vx << "\nvy" << i << ": " << vy << "\nvz" << i << " : " << vz << endl << endl;//DIAGNOREMO
+      vertices.push_back(vec4(vx, vy, vz, 1.0));
+
+      cout << "vertices[" << i << "]: " << vertices[i] << endl;//DIAGNOREMO
+      in >> delim;
+      cout << "vertex delim, in loop: " << delim << endl;//DIAGNOREMO
+      i++;
+   }
+   numVertices = i;
+   cout << "numVertices: " << numVertices << endl;
+
+   //read the vertex normals as long as delim == "vn"
+   int j = 0; //use as index for normals array
+   while (delim == "vn")
+   {
+      in >> vnx >> vny >> vnz >> delim;
+      //cout << "\nvn1" << j << ": " << vn1 << "\nvn2" << j << ": " << vn2 << "\nvn3" << j << " : " << vn3 << endl << endl;//DIAGNOREMO
+      normals.push_back(vec4(vnx, vny, vnz, 0));
+      //cout << "normals[" << j << "]: " << normals[j] << endl;
+      j++;
+   }
+   numNormals = j;
+
+   // skip ahead until reaching face section
+   while (delim != "f"){ in >> delim; }
+
+   // read in the face info
+   char cdelim = NULL; //delimiter is now a character rather than a string
+   int k = 0;
+   int vv, tt, nn;
+   while (cdelim != '/')
+   {
+      for (int i = 0; i < 3; i++) //repeat the read sequence 3 times per line
+      {
+         in >> vv;
+         vertIndices.push_back((vv)-1); cout << "vv: " << vv;
+         in >> cdelim;
+         //cout << "in face loop, cdelim = " << cdelim;//DIAGNOREMO
+
+         if (cdelim == '/') //check to see if there's a tt value, or another '/'
+         {
+            in >> cdelim;
+            //cout << "in the if, cdelim = " << cdelim << endl;//DIAGNOREMO
+            if (cdelim == '/'){ tt = NULL; }//two '/'s indicates no texture index
+            else{ in >> tt; in >> cdelim; } // but there might be! if so, read it and the following cdelim.
+         }
+
+         in >> nn;
+         cout << "\tnn: " << nn << endl;//DIAGNOREMO
+         normIndices.push_back((nn)-1);
+      }
+      in >> cdelim;
+      //cout << "cdelim after 3loop: " << cdelim << endl;//DIAGNOREMO
+      //if (cdelim == '/'){ cout << "eof" << endl; }//DIAGNOREMO
+      k++;
+   }
+   numIndices = k;
+}
+
+int Object::load(GLuint program)
+{
+   // Create and initialize a buffer object
+   //GLuint buffer;
+   int size = numVertices * 16;
+   glGenBuffers(1, &buffer);
+   glBindBuffer(GL_ARRAY_BUFFER, buffer);
+   //put color and verts in same buffer
+   glBufferData(GL_ARRAY_BUFFER, size + size, NULL, GL_STATIC_DRAW);
+   glBufferSubData(GL_ARRAY_BUFFER, 0, size, &vertices[0]);
+   glBufferSubData(GL_ARRAY_BUFFER, size, size, &vertices[0]);
+
+   //load the index buffer for the vertices
+   glGenBuffers(1, &Ibuffer);
+   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, Ibuffer);
+   glBufferData(GL_ELEMENT_ARRAY_BUFFER, numIndices * 4, &vertIndices[0], GL_STATIC_DRAW);
+
+   GLuint vPosition = glGetAttribLocation(program, "vPosition");
+   glEnableVertexAttribArray(vPosition);
+   glVertexAttribPointer(vPosition, 4, GL_FLOAT, GL_FALSE, 0,
+      BUFFER_OFFSET(0));
+
+   GLuint vColor = glGetAttribLocation(program, "vColor");
+   glEnableVertexAttribArray(vColor);
+   glVertexAttribPointer(vColor, 4, GL_FLOAT, GL_FALSE, 0,
+      BUFFER_OFFSET(size));
+
+   return 0;
+}
+
+void Object::draw()
+{
+   glBindVertexArray(buffer);
+   glBindVertexArray(Ibuffer);
+   glDrawElements(GL_TRIANGLES, numIndices, GL_UNSIGNED_INT, 0);
+}
+
+Object::~Object()
+{
+}

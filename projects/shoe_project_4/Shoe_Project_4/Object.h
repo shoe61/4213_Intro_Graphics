@@ -35,11 +35,20 @@ class Object
    int numPoints;
  
    GLuint buffer, Ibuffer;
+
+   // variables used to find bounding box dimensions and center
+   double maxvx = 0; double minvx = 0;
+   double maxvy = 0; double minvy = 0;
+   double maxvz = 0; double minvz = 0;
+   
    
 public:
    Object(char* file_name);
    ~Object();
    int load(GLuint);
    void draw();
+   vec3 bounding_box();
+   double bounding_box_max();
+   vec4 ctr_box();
 };
 

@@ -42,23 +42,29 @@ Object::Object(char* file_name)
    double vnx, vny, vnz;   //normal x, y, and z coordinates  
    int vv, tt, nn;         //vertex, texture (not used), and normal indices
 
+
+   
    stringstream ss;        // stringstream object created from each line, transfers  
                            // data to the appropriate vectors.
    string line;            // file is read line by line
 
-   
+
    while (getline(in, line))              // Iterate through the file line by line
    {
       if (line.substr(0, 2) == "v ")      // Identify the vertex data lines
       {
          ss << line;                      // read the line out to a stringstream object
          ss >> delim >> vx >> vy >> vz;   // parse the delimiter and vertex coordinates
+
+         // these are to determine the min and max values of vx, vy, and vz
+         if (vx > maxvx) maxvx = vx; if (vx < minvx) minvx = vx;
+         if (vy > maxvy) maxvy = vy; if (vy < minvy) minvy = vy;
+         if (vz > maxvz) maxvz = vz; if (vz < minvz) minvz = vz;
+
          ss.str(""); ss.clear();          // empty the stringstream object and clear flags
-        
          vertices.push_back(vec4(vx, vy, vz, 1));        // store vertex data
-       }
-      numVertices = vertices.size();      // vertex count
-      
+      }
+           
       /*if (line.substr(0, 2) == "vn")      // repeat above procedure for vertex normals
       {
          ss << line;
@@ -83,14 +89,45 @@ Object::Object(char* file_name)
          ss.str(""); ss.clear();
       }
       numIndices = vertIndices.size();
-      
    }
 
    // use the vertex indices to create an array of triangles
    for (int i = 0; i < numIndices; i++)
    {
+      //cout << vertices[vertIndices[i]] << endl;
       points.push_back(vertices[vertIndices[i]]);
    }
+
+}
+
+//----------------------------------------------------------------------------
+
+// computes bounding box with 20 percent padding:
+vec3 Object::bounding_box()
+{
+   vec3 bounding_box((maxvx - minvx)* 1.2, (maxvy - minvy)* 1.2, (maxvz - minvz)* 1.2);
+   return bounding_box;
+}
+
+//----------------------------------------------------------------------------
+// computes major axis of bounding box:
+
+double Object::bounding_box_max()
+{
+   double bounding_box_max = (maxvx - minvx);
+   if ((maxvy - minvy) > bounding_box_max) bounding_box_max = (maxvy - minvy);
+   if ((maxvz - minvz) > bounding_box_max) bounding_box_max = (maxvz - minvz);
+   bounding_box_max *= 1.2;
+   return bounding_box_max;
+}
+
+//----------------------------------------------------------------------------
+// computes the center of the bounding box:
+
+vec4 Object::ctr_box()
+{
+   vec4 ctr_box((maxvx + minvx) / 2, (maxvy + minvy) / 2, (maxvz + minvz) / 2, 1);
+   return ctr_box;
 }
 
 //----------------------------------------------------------------------------

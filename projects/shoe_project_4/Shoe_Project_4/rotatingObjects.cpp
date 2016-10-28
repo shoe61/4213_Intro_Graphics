@@ -114,9 +114,9 @@ display( void )
     glUniform3fv( theta, 1, Theta );
 
     Model.draw(); // call to draw
-     
 
-    // Timing etc
+    
+   // Timing etc
     frame++;
     time = glutGet(GLUT_ELAPSED_TIME);
     char display_string[100];

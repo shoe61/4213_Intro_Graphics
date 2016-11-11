@@ -1,7 +1,7 @@
 //******************************************************************************
-//                Project #3 Rotating Objects
+//                Project #4 Model View and Perspective with Rotating Objects
 //                Name: Scott Schumacher
-//                Intro to Computer Graphics 10/14/2016
+//                Intro to Computer Graphics 11/11/2016
 //******************************************************************************
 // This file, Object.cpp, is the declaration of the object class; it describes
 // the variables, data structures, and methods that are common to objects of this
@@ -24,15 +24,15 @@ class Object
    string name;
    int numVertices;
    int numIndices;
-   //int numNormals;
+   int numNormals;
    vector<vec4>vertices;
-   //vector<vec4> normals;
+   vector<vec4> normals;
    vector<GLuint> vertIndices;
-   //vector<GLuint> normIndices;
+   vector<GLuint> normIndices;
    vec4* colorsP; //expedient- points to vertIndices
 
-   vector<vec4>points;
-   int numPoints;
+   vector<vec4>points; // this is the new vector initially containing the new vertices
+   int numPoints;  // the new variable numbering thepoints
  
    GLuint buffer, Ibuffer;
 

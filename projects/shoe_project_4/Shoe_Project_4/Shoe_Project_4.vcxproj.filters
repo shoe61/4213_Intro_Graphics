@@ -32,6 +32,12 @@
     <None Include="vshader_a4.glsl">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="fshader42.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="vshader42.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="rotatingObjects.cpp">

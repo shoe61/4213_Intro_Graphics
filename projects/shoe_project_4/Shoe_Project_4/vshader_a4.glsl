@@ -5,6 +5,8 @@ in  vec4 vColor;
 out vec4 color;
 
 uniform vec3 theta;
+uniform mat4 modelViewLoc; // SS
+uniform mat4 projection; // SS
 
 void main() 
 {
@@ -36,7 +38,14 @@ void main()
 
     // Workaround for bug in ATI driver
     rz[2][2] = 1.0;
+
+	mat4 rot = rz * ry * rx;
     
     color = vColor;
-    gl_Position = rz * ry * rx * vPosition;
+	
+	//gl_Position = rot * projection * vPosition / vPosition.w;
+	gl_Position = projection * modelViewLoc * rot * vPosition / vPosition.w;
+	//gl_Position = rot * model_view * vPosition / vPosition.w;
+    //gl_Position = rz * ry * rx * vPosition;  
+	// SS gl_Position = model_view * vPosition / vPosition.w; 
 } 

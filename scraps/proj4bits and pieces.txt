@@ -1,0 +1,16 @@
+ // SSM this is testing the bounding_box method:
+   //cout << "bounding box x, including 20 percent: " << (instModels[modelChoice].bounding_box()).x << endl;
+   //cout << "bounding box y, including 20 percent: " << (Model.bounding_box()).y << endl;
+   //cout << "bounding box z, including 20 percent: " << (Model.bounding_box()).z << endl;
+
+   // this is to check the bounding_box_max method:
+   // it's padded!
+   //cout << "BBox max = " << (instModels[modelChoice].bounding_box_max()) << endl;
+   
+
+   // this is to check the ctr_box method:
+   //cout << "bounding box center x: " << (Model.ctr_box()).x << endl;
+   //cout << "bounding box center y: " << (Model.ctr_box()).y << endl;
+   //cout << "bounding box center z: " << (Model.ctr_box()).z << endl;
+
+   //theta = glGetUniformLocation(program, "theta");

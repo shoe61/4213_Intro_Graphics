@@ -1,8 +1,8 @@
-//******************************************************************************
-//                Project #4 Model View and Perspective with Rotating Objects
+//*************************************************************************************************
+//                Project #5 Model View and Perspective with Lighting and materials
 //                Name: Scott Schumacher
-//                Intro to Computer Graphics 11/11/2016
-//******************************************************************************
+//                Intro to Computer Graphics 11/27/2016
+//*************************************************************************************************
 // This file, Object.cpp, contains the implementation of the Object class de-
 // clared in Object.h. There are four public methods from the previous iteration:
 // a parameterized constructor which receives as its only parameter the name of 
@@ -12,7 +12,7 @@
 //  
 // 
 
-//----------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------
 
 #include "Object.h"
 
@@ -27,7 +27,25 @@
 
 Object::Object(char* file_name)
 {
-   //open the file and check that it's open
+   // get the name of the material file, which is the same as the name of the obj file with 
+   // the ending .mtl  and strip the ending:
+   string fileName = file_name;
+   size_t lastIndex = fileName.find_last_of(".");
+   string nakedName = fileName.substr(0, lastIndex);
+   
+   // and append the .mtl ending to the naked name
+   string matlFile = nakedName + ".mtl";
+
+   // open the material file and check that it's open
+   ifstream matl;
+   matl.open(matlFile);
+   if (!matl)
+   {
+      cerr << "Oops! Can't open " << matlFile;
+      exit(1);
+   }
+   
+   //open the object file and check that it's open
    ifstream in;
    in.open(file_name);
    if (!in)
@@ -42,6 +60,8 @@ Object::Object(char* file_name)
    double vx, vy, vz;      // vertex x, y, and z cooridinates
    double vnx, vny, vnz;   //normal x, y, and z coordinates  
    int vv, tt, nn;         //vertex, texture (not used), and normal indices
+
+
    
    stringstream ss;        // stringstream object created from each line
    string line;            // file is read line by line
@@ -70,9 +90,7 @@ Object::Object(char* file_name)
          ss.str(""); ss.clear();
          
          abNormals.push_back(vec4(vnx, vny, vnz, 0.0));
-         
-         
-      }numNormals = normals.size();      
+      }      
 
 
       if (line.substr(0, 2) == "f ")      // read indices; there are three sets per line
@@ -92,6 +110,9 @@ Object::Object(char* file_name)
       numIndices = vertIndices.size();
    }
 
+   //close the object file
+   in.close();
+
    // use the vertex indices to create an array of triangles; the new array is 
    // the one that will be loaded for drawing. Makes it possible to use glDrawArrays
    for (int i = 0; i < numIndices; i++)
@@ -99,9 +120,47 @@ Object::Object(char* file_name)
       vertices.push_back(points[vertIndices[i]]);
       normals.push_back(abNormals[normIndices[i]]);
    }
+
+   numVertices = vertices.size();
+   numNormals = normals.size();
+
+   // now read the material properties
+   while (getline(matl, line))
+   {
+      if (line.substr(0, 3) == "Ns ")      // Identify the shininess constant
+      {
+         ss << line;                      // read the line out to a stringstream object
+         ss >> delim >> shininess;   // parse shininess
+         ss.str(""); ss.clear();          // empty the stringstream object and clear flags
+      }
+      
+      if (line.substr(0, 3) == "Ka ")      // Identify the ambient constant lines
+      {
+         ss << line;                      // read the line out to a stringstream object
+         ss >> delim >> Kar >> Kag >> Kab;   // parse red, blue, and green components of vec3 matlA
+         matlA = vec3(Kar, Kag, Kab);  //instantiate the vector
+         ss.str(""); ss.clear();          // empty the stringstream object and clear flags
+      }
+
+      if (line.substr(0, 3) == "Kd ")      // Identify the diffuse constant lines
+      {
+         ss << line;                      // read the line out to a stringstream object
+         ss >> delim >> Kdr >> Kdg >> Kdb;   // parse red, blue, and green components of vec3 matlD
+         matlD = vec3(Kdr, Kdg, Kdb);  //instantiate the vector
+         ss.str(""); ss.clear();          // empty the stringstream object and clear flags
+      }
+
+      if (line.substr(0, 3) == "Ks ")      // Identify the spectral constant lines
+      {
+         ss << line;                      // read the line out to a stringstream object
+         ss >> delim >> Ksr >> Ksg >> Ksb;   // parse red, blue, and green components of vec3 matlS
+         matlS = vec3(Ksr, Ksg, Ksb);  //instantiate the vector
+         ss.str(""); ss.clear();          // empty the stringstream object and clear flags
+      }
+   }
 }
 
-//----------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------
 
 // computes bounding box with 20 percent padding:
 vec3 Object::bounding_box()
@@ -110,7 +169,7 @@ vec3 Object::bounding_box()
    return bounding_box;
 }
 
-//----------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------
 
 // computes major axis of bounding box:
 
@@ -119,11 +178,11 @@ double Object::bounding_box_max()
    double bounding_box_max = (maxvx - minvx);
    if ((maxvy - minvy) > bounding_box_max) bounding_box_max = (maxvy - minvy);
    if ((maxvz - minvz) > bounding_box_max) bounding_box_max = (maxvz - minvz);
-   bounding_box_max *= 1.75; // has to be padded this much to accommodate a rotating cube on its diagonal!
+   bounding_box_max *= 1.75; // has to be padded to accommodate a rotating cube on its diagonal!
    return bounding_box_max;
 }
 
-//----------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------
 
 // computes the center of the bounding box:
 
@@ -133,7 +192,7 @@ vec4 Object::ctr_box()
    return ctr_box;
 }
 
-//----------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------
 
 int Object::load(GLuint program)
 {
@@ -141,9 +200,6 @@ int Object::load(GLuint program)
    
    int size = numIndices * 16;   // each vertex requires 16 bytes, and is listed repeatedly
                                  // each time it's used...
-
-   int normSize = numNormals * 16; // now going to store normals in the same buffer as vertices..the size is not the same.
-
 
    glGenBuffers(1, &buffer);
    glBindBuffer(GL_ARRAY_BUFFER, buffer);
@@ -163,17 +219,26 @@ int Object::load(GLuint program)
    glVertexAttribPointer(vNormal, 4, GL_FLOAT, GL_FALSE, 0,
       BUFFER_OFFSET(size));   // offset size: normal data in second half
 
+   matlDLoc = glGetUniformLocation(program, "matlD");
+   matlSLoc = glGetUniformLocation(program, "matlS");
+   matlALoc = glGetUniformLocation(program, "matlA");
+   shinyLoc = glGetUniformLocation(program, "shininess");
+
    return 0;
 }
 
-//----------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------
 
-void Object::draw()
+void Object::draw()  // material constants!
 {
+   glUniform3fv(matlDLoc, 1, matlD);
+   glUniform3fv(matlSLoc, 1, matlS);
+   glUniform3fv(matlALoc, 1, matlA);
+   glUniform1f(shinyLoc, shininess);
    glDrawArrays(GL_TRIANGLES, 0, numIndices);
 }
 
-//----------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------
 
 Object::~Object()
 {

@@ -1,5 +1,5 @@
 //Scott Schumacher
-//Project 4: fshader42.glsl
+//Project 5: fshader42.glsl
 
 #version 150 
 

@@ -30,6 +30,12 @@ class Object
    vector<GLuint> vertIndices;
    vector<GLuint> normIndices;
    vec4* colorsP; //expedient- points to vertIndices
+   vector<vec3> obo; // name for a buffer to hold the material constants
+
+   vec3 matlD, matlS, matlA;  // material constants, read from .mtl file
+   float Kdr, Kdg, Kdb, Ksr, Ksg, Ksb, Kar, Kag, Kab;    // r, g, b components of vec3s matlD, matlS, matlA
+   float shininess;           // shininess, also from .mtl file
+   GLuint matlDLoc, matlSLoc, matlALoc, shinyLoc;  // locations in shader program of these variables
 
    vector<vec4>points; // this is the new vector initially containing the new vertices
    vector<vec4>abNormals; // this is the temp vector containing the new normals

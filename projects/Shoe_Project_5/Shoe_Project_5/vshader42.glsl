@@ -1,5 +1,6 @@
 //Scott Schumacher
-//Project 4: vshader.glsl
+//Project 5: vshader.glsl
+// including light and material constants
 
 #version 420 
 
@@ -10,6 +11,7 @@ out vec4 color;
 uniform mat4 model_view;
 uniform mat4 projection;
 
+// unfiform variables for light and materials
 uniform vec4 lightPos;
 uniform vec3 lightD, lightS, lightA;
 uniform vec3 matlD, matlS, matlA;

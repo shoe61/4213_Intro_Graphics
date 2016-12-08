@@ -11,7 +11,7 @@
 //                Intro to Computer Graphics 
 //******************************************************************************
 // added lighting initialization
-// declared indices for light and material coefficients; getUniformLocationCalls;
+// This is a continuation of project 4. I have added lighting and materials.
 //
 //
 //******************************************************************************
@@ -31,45 +31,37 @@ mat4 model_view;
 vec4 eye, at, up, ctr_box;  // locations of eye, focus of view; direction up.
 GLfloat BBoxMax, z_eye = 4.0; // max dimension of bounding box; distance from model to camera
 
-//*********************************************************************************************************************
+//*************************************************************************************************
 
 GLuint ProjectionLoc; // projection matrix uniform shader variable location
 mat4 projection; // projection matrix and assoc variables
 GLfloat fovy = 45.0; // field of view, degrees, y- axis: start at 45
 GLfloat zFar, zNear, aspectRatio; //near and far limits of clipping volume; ration w:h of viewport
 
-//*********************************************************************************************************************
+//*************************************************************************************************
 // Lighting initialization-copied from Angel ch5 example2.cpp
 
-vec4 lightPos(5.0, 5.0, 5.0, 0.0); // a vector, not a position; all rays from this source will be parallel, as from 
-// an infinitely distant source.
+vec4 lightPos(5.0, 5.0, 5.0, 0.0); // a vector, not a position; all rays from this source will be 
+// parallel, as from an infinitely distant source.
 vec3 lightD(1.0, 1.0, 1.0);
 vec3 lightS(1.0, 1.0, 1.0);
 vec3 lightA(0.2, 0.2, 0.2);
 GLuint lightPosLoc, lightDLoc, lightSLoc, lightALoc;
 
-//*********************************************************************************************************************
-// material initialization-copied from Angel ch5 example2.cpp
-vec3 matlD(0.880000, 0.113923, 0.446084);
-vec3 matlS(0.990000, 0.428872, 0.551990);
-vec3 matlA(1.0, 1.0, 1.0);
-float shininess = 300.0;
-GLuint matlDLoc, matlSLoc, matlALoc, shinyLoc;
-
-//*********************************************************************************************************************
-
-
-//*********************************************************************************************************************
+//**************************************************************************************************
 const int numModels =3 ;
-Object instModels[numModels] = {Object("doodad.obj"), Object("jack.obj"), Object("cube.obj")/*, Object("lem.obj")*/}; 
+Object instModels[numModels] = { Object("jack.obj"), Object("lem.obj"), Object("schumacher.obj") };
+
+//  Object("doodad.obj"), Object("jack.obj"), Object("cube.obj"), Object("lem.obj"), 
+// Object("cone.obj"), Object("schumacher.obj")
 
 int modelChoice = 0;  // active model
 
-//*********************************************************************************************************************
+//*************************************************************************************************
 
 GLuint vao[numModels]; // vertex array object for each model
 
-//*********************************************************************************************************************
+//*************************************************************************************************
 
 // OpenGL initialization
 void
@@ -80,18 +72,20 @@ init()
    glUseProgram(program);
    
    // Create a vertex array object for each model to be displayed
-   glGenVertexArrays(numModels, vao); // SSM
-   
-   // loop-  bind vao for each file 
+   glGenVertexArrays(numModels, vao); 
+
+   // loop-  bind vao for each file
    for (int m = 0; m < numModels; m++)
    {
-      glBindVertexArray(vao[m]);  
+      glBindVertexArray(vao[m]); 
+      
       instModels[m].load(program); //program returned by InitShader.cpp
    }
 
    // binding an already bound vao makes it the active object
    glBindVertexArray(vao[modelChoice]);
-      
+  
+
    // passing uniform variables to shader
    ProjectionLoc = glGetUniformLocation(program, "projection");  
    modelViewLoc = glGetUniformLocation(program, "model_view"); 
@@ -105,21 +99,12 @@ init()
    glUniform3fv(lightSLoc, 1, lightS);
    lightALoc = glGetUniformLocation(program, "lightA");
    glUniform3fv(lightALoc, 1, lightA);
-
-   matlDLoc = glGetUniformLocation(program, "matlD");
-   glUniform3fv(matlDLoc, 1, matlD);
-   matlSLoc = glGetUniformLocation(program, "matlS");
-   glUniform3fv(matlSLoc, 1, matlS);
-   matlALoc = glGetUniformLocation(program, "matlA");
-   glUniform3fv(matlALoc, 1, matlA);
-   shinyLoc = glGetUniformLocation(program, "shininess");
-   glUniform1f(shinyLoc, shininess);
    
    glEnable(GL_DEPTH_TEST);
    glClearColor(1.0, 1.0, 1.0, 1.0);
 }
 
-//*********************************************************************************************************************
+//*************************************************************************************************
 
 // SSX rotation matrix for x axis
 mat4 RotX(GLfloat theta)
@@ -148,7 +133,7 @@ mat4 RotZ(GLfloat theta)
       0.0, 0.0, 0.0, 1.0);
 }
 
-//*********************************************************************************************************************
+//*************************************************************************************************
 int frame, fps, time, timebase = 0;
 
 void
@@ -189,7 +174,7 @@ display(void)
    glutSwapBuffers();
 }
 
-//*********************************************************************************************************************
+//*************************************************************************************************
 
 bool wirestate = true; // used for toggling wireframe view
 
@@ -204,6 +189,8 @@ keyboard(unsigned char key, int x, int y)
 
    // reverse the direction of rotation
    case 'r': angularSpeed *= -1; break;
+   case 'D': angularSpeed *= 2; break;
+   case 'd': angularSpeed *= 0.5; break;
 
    // switch between models
    case 's': modelChoice = (modelChoice += 1) % numModels; 
@@ -231,7 +218,7 @@ keyboard(unsigned char key, int x, int y)
    glUniformMatrix4fv(ProjectionLoc, 1, GL_TRUE, projection); // SSZ
 }
 
-//*********************************************************************************************************************
+//*************************************************************************************************
 
 void  // mouse buttons control rotation of model; 'r' key reverses direction
 mouse(int button, int state, int x, int y)
@@ -247,10 +234,12 @@ mouse(int button, int state, int x, int y)
       case GLUT_RIGHT_BUTTON:   Axis = Zaxis; Theta[Axis] += angularSpeed;
          if(Theta[Axis] > 360.0){Theta[Axis] -= 360.0;} break;
       }
+
+
    }
  }
 
-//*********************************************************************************************************************
+//*************************************************************************************************
 
 void
 idle(void)
@@ -259,7 +248,7 @@ idle(void)
    glutPostRedisplay();
 }
 
-//*********************************************************************************************************************
+//*************************************************************************************************
 
 void // required to resize window / maintain aspect ratio
 reshape(int width, int height)
@@ -273,8 +262,7 @@ reshape(int width, int height)
    glUniformMatrix4fv(ProjectionLoc, 1, GL_TRUE, projection); // SSZ
 }
 
-
-//*********************************************************************************************************************
+//*************************************************************************************************
 
 int
 main(int argc, char **argv)

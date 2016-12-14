@@ -46,6 +46,8 @@
 
 #include "Object.h"
 
+GLuint program;
+
 // Array of rotation angles (in degrees) for each coordinate axis
 enum { Xaxis = 0, Yaxis = 1, Zaxis = 2, NumAxes = 3 };
 int      Axis = Xaxis;
@@ -67,8 +69,8 @@ GLfloat zFar, zNear, aspectRatio; //near and far limits of clipping volume; rati
 
 //******************************************************************************
 
-const int numModels =4 ;
-Object instModels[numModels] = { Object("teapot.obj"), Object("jack.obj"), Object("cube.obj"), Object("lem.obj")}; 
+const int numModels =3 ;
+Object instModels[numModels] = { Object("teapot.obj"), Object("jack.obj"), Object("cube.obj")/*, Object("lem.obj")*/}; 
 
 int modelChoice = 0;  // active model
 
@@ -83,7 +85,7 @@ void
 init()
 {
    // Load shaders and use the resulting shader program
-   GLuint program = InitShader("vshader42.glsl", "fshader42.glsl");
+   program = InitShader("vshader42.glsl", "fshader42.glsl");
    glUseProgram(program);
    
    // Create a vertex array object for each model to be displayed
